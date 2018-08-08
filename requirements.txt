@@ -1,0 +1,4 @@
+requests==2.18.4
+clova-cek-sdk==1.0.0
+flask
+gunicorn

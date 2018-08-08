@@ -3,7 +3,7 @@ from cek import Clova
 import json
 
 # application_id is used to verify requests.
-application_id = "com.github.mitubaEX.test"
+application_id = "com.github.mitubaEX.CalorieBooks"
 # Set debug_mode=True if you are testing your extension. If True, this disables request verification
 clova = Clova(application_id=application_id,
               default_language="ja", debug_mode=False)
@@ -21,17 +21,27 @@ def getCalorieData(food_name):
 
 @clova.handle.launch
 def launch_request_handler(clova_request):
-    return clova.response("こんにちは世界。スキルを起動します")
+    return clova.response("聞きたい食材のカロリーを言ってください．終了したい場合は，終了と言ってください")
 
 
-@clova.handle.default
-def default_handler(clova_request):
+@clova.handle.end
+def end_handler(clova_request):
+    return
+
+
+@clova.handle.intent("FoodsIntent")
+def intent_handler(clova_request):
     try:
         food_name = clova_request.slot_value('Foods')
         calorie = getCalorieData(food_name)
         return clova.response(str(food_name) + "のカロリーは" + str(calorie) + "キロカロリーです")
     except:
-        return clova.response("すみません．もう一度お願いします")
+        return clova.response("その食材は辞書に登録されていない可能性があります．別の単語をお試しください")
+
+
+@clova.handle.default
+def default_handler(clova_request):
+    return clova.response("すみません．もう一度お願いします")
 
 
 from flask import Flask, request, jsonify
