@@ -58,5 +58,10 @@ def my_service():
     return resp
 
 
+@app.route('/', methods=['GET'])
+def echo():
+    return 'echo'
+
+
 if __name__ == "__main__":
     app.run()
